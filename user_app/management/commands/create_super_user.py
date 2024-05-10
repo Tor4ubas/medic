@@ -3,7 +3,7 @@ from datetime import date
 
 from django.core.management import BaseCommand
 
-from user_app.models import User
+
 
 
 class Command(BaseCommand):
