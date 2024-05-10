@@ -2,7 +2,6 @@ from django.urls import path
 
 from doctors.apps import DoctorsConfig
 from doctors.views import DoctorListView, DoctorCreateView, DoctorUpdateView, DoctorDeleteView
-#from promo.views import *
 
 app_name = DoctorsConfig.name
 
