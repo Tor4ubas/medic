@@ -1,43 +1,34 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from user_app.models import User
 
 
 class StyleFormMixin:
-    """
-    Класс Mixin для стилизации форм.
-    """
 
     def __init__(self, *args, **kwargs):
-        """
-        Инициализация класса StyleFormMixin.
-        """
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            if not isinstance(field, (forms.BooleanField, forms.ModelMultipleChoiceField)):
+                field.widget.attrs['class'] = 'form-control'
 
 
 class UserRegisterForm(StyleFormMixin, UserCreationForm):
-    """
-    Класс для формы регистрации пользователя.
-    """
 
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2')
+        fields = ('email', 'password1', 'password2', 'first_name', 'last_name')
 
 
-class UserForm(StyleFormMixin, UserChangeForm):
-    """
-    Класс для формы редактирования пользователя.
-    """
+class LoginForm(StyleFormMixin, AuthenticationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'first_name', 'last_name', 'phone', 'country', 'avatar')
+        fields = ('email', 'password')
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-        self.fields['password'].widget = forms.HiddenInput()
+class UserForm(StyleFormMixin, forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'birthday', 'phone', 'address', 'photo', 'comment',)
